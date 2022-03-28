@@ -26,15 +26,36 @@ func TestLoan(t *testing.T) {
 
 	})
 }
+func TestList(t *testing.T) {
+	t.Run("TestListSuccess", func(t *testing.T) {
+		listUseCase := NewLoanUseCase(mockLoanRepository{})
+		data, err := listUseCase.List()
+		assert.Nil(t, err)
+		assert.Equal(t, "success", data[0].Address)
+	})
+
+	t.Run("TestListError", func(t *testing.T) {
+		listUseCase := NewLoanUseCase(mockLoanRepositoryError{})
+		data, err := listUseCase.List()
+		assert.NotNil(t, err)
+		assert.Nil(t, nil, data)
+	})
+}
 
 type mockLoanRepository struct{}
 
 func (m mockLoanRepository) Loan(UserId int, BookId int, Address string) (_entities.Loan, int, error) {
 	return _entities.Loan{Address: "success"}, 1, nil
 }
+func (m mockLoanRepository) List() ([]_entities.Loan, error) {
+	return []_entities.Loan{{Address: "success"}}, nil
+}
 
 type mockLoanRepositoryError struct{}
 
 func (m mockLoanRepositoryError) Loan(UserId int, BookId int, Address string) (_entities.Loan, int, error) {
 	return _entities.Loan{}, 0, fmt.Errorf("error")
+}
+func (m mockLoanRepositoryError) List() ([]_entities.Loan, error) {
+	return nil, fmt.Errorf("error")
 }
