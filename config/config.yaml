@@ -1,0 +1,9 @@
+Port: 8000
+SecretJWT: "SECRET"
+Database:
+  Port: 3306
+  Driver: "mysql"
+  Name: "ProjectTest1"
+  Address: "127.0.0.1"
+  Username: "root"
+  Password: ""
