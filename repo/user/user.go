@@ -69,7 +69,6 @@ func (ur *UserRepository) UpdatedUser(users _entities.User) (_entities.User, err
 	}
 	if tx.RowsAffected == 0 {
 		return users, tx.Error
-
 	}
 	return users, nil
 }

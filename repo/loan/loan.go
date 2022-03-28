@@ -1,7 +1,6 @@
 package loan
 
 import (
-	"errors"
 	_entities "latihan/coba-project/entities"
 
 	"gorm.io/gorm"
@@ -17,30 +16,33 @@ func NewLoanRepository(db *gorm.DB) *LoanRepository {
 	}
 }
 
-func (lr *LoanRepository) Loan(Name string, Book string, Address string) (_entities.Loan, int, error) {
+func (lr *LoanRepository) Loan(UserId int, BookId int, Address string) (_entities.Loan, int, error) {
 	var loan _entities.Loan
 	var user _entities.User
 	var book _entities.Book
-	tx := lr.database.Where("title = ?", Book).Find(&book)
+	tx := lr.database.Find(&book, BookId)
 	if tx.Error != nil {
 		return loan, 0, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return loan, 0, errors.New("book not found")
+		return loan, 0, tx.Error
 	}
 
-	err := lr.database.Where("name=?", Name).Find(&user)
+	err := lr.database.Find(&user, UserId)
 	if err.Error != nil {
 		return loan, 0, err.Error
 	}
 	if err.RowsAffected == 0 {
-		return loan, 0, errors.New("user not found")
+		return loan, 0, err.Error
 	}
 	if book.Qty > 0 {
 		book.Qty = book.Qty - 1
+		if book.Qty == 0 {
+			book.Status = "book on loan"
+		}
 		lr.database.Save(&book)
 	} else {
-		return loan, 0, errors.New("book on loan")
+		return loan, 0, err.Error
 	}
 	loan.BookID = book.ID
 	loan.UserID = user.ID
@@ -50,7 +52,7 @@ func (lr *LoanRepository) Loan(Name string, Book string, Address string) (_entit
 		return loan, 0, loans.Error
 	}
 	if loans.RowsAffected == 0 {
-		return loan, 0, errors.New("something wrong")
+		return loan, 0, loans.Error
 	}
 	return loan, int(loans.RowsAffected), nil
 }

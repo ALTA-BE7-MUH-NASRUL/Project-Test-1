@@ -15,7 +15,7 @@ func NewLoanUseCase(loanrepo _loanReapository.LoanRepositoryInterface) LoanUseCa
 	}
 }
 
-func (luc *LoanUseCase) Loan(Name string, Book string, Address string) (_entities.Loan, int, error) {
-	loan, row, err := luc.loanRepository.Loan(Name, Book, Address)
+func (luc *LoanUseCase) Loan(UserId int, BookId int, Address string) (_entities.Loan, int, error) {
+	loan, row, err := luc.loanRepository.Loan(UserId, BookId, Address)
 	return loan, row, err
 }

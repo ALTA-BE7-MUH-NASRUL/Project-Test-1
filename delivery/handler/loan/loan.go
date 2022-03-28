@@ -21,15 +21,15 @@ func NewLoanHandler(loanUseCase _loanUseCase.LoanUseCaseInterface) *LoanHandler 
 func (lh *LoanHandler) LoaningHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		type loaning struct {
-			Name    string `json:"name"`
-			Book    string `json:"book"`
+			UserId  int    `json:"UserId"`
+			BookId  int    `json:"BookId"`
 			Address string `json:"address"`
 		}
 		var loans loaning
 		c.Bind(&loans)
-		loan, row, err := lh.loanUseCase.Loan(loans.Name, loans.Book, loans.Address)
+		loan, row, err := lh.loanUseCase.Loan(loans.UserId, loans.BookId, loans.Address)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed "))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("failed to loaning book"))
 		}
 		if row == 0 {
 			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("book on loan"))
