@@ -1,7 +1,6 @@
 package retur
 
 import (
-	"errors"
 	_entities "latihan/coba-project/entities"
 
 	"gorm.io/gorm"
@@ -17,27 +16,34 @@ func NewReturRepository(db *gorm.DB) *ReturRepository {
 	}
 }
 
-func (rr *ReturRepository) Retur(Name string, Book string, Address string) (_entities.Retur, int, error) {
+func (rr *ReturRepository) Retur(LoanId int, BookId int, Address string) (_entities.Retur, int, error) {
 	var retur _entities.Retur
 	var user _entities.User
 	var book _entities.Book
-	tx := rr.database.Where("title = ?", Book).Find(&book)
-	if tx.Error != nil {
-		return retur, 0, tx.Error
-	}
-	if tx.RowsAffected == 0 {
-		return retur, 0, errors.New("book not found")
-	}
-
-	err := rr.database.Where("name=?", Name).Find(&user)
+	var loan _entities.Loan
+	err := rr.database.Find(&loan, LoanId)
 	if err.Error != nil {
 		return retur, 0, err.Error
 	}
 	if err.RowsAffected == 0 {
-		return retur, 0, errors.New("user not found")
+		return retur, 0, err.Error
 	}
+	if loan.Status == "returned" {
+		return retur, 0, nil
+	}
+	tx := rr.database.Find(&book, BookId)
+	if tx.Error != nil {
+		return retur, 0, tx.Error
+	}
+	if tx.RowsAffected == 0 {
+		return retur, 0, tx.Error
+	}
+	loan.Status = "returned"
+	rr.database.Save(&loan)
+	rr.database.Find(&user, loan.UserID)
 	book.Qty = book.Qty + 1
-	rr.database.Save(&retur)
+	book.Status = "book available"
+	rr.database.Save(&book)
 	retur.BookID = book.ID
 	retur.UserID = user.ID
 	retur.Address = Address
@@ -46,7 +52,7 @@ func (rr *ReturRepository) Retur(Name string, Book string, Address string) (_ent
 		return retur, 0, returs.Error
 	}
 	if returs.RowsAffected == 0 {
-		return retur, 0, errors.New("something wrong")
+		return retur, 0, returs.Error
 	}
 	return retur, int(returs.RowsAffected), nil
 }

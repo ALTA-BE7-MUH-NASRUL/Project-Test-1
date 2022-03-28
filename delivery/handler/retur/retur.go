@@ -21,19 +21,19 @@ func NewReturHandler(returUseCase _returUseCase.ReturUseCaseInterface) *ReturHan
 func (rh *ReturHandler) ReturingHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
 		type returing struct {
-			Name    string `json:"name"`
-			Book    string `json:"book"`
+			LoanId  int    `json:"LoanId"`
+			BookId  int    `json:"BookId"`
 			Address string `json:"address"`
 		}
 		var returs returing
 		c.Bind(&returs)
-		retur, row, err := rh.returUseCase.Retur(returs.Name, returs.Book, returs.Address)
+		retur, row, err := rh.returUseCase.Retur(returs.LoanId, returs.BookId, returs.Address)
 		if err != nil {
-			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed "))
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to returning book"))
 		}
 		if row == 0 {
-			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("failed returing book"))
+			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("the book has been returned"))
 		}
-		return c.JSON(http.StatusOK, helper.ResponseSuccess("Success returing book", retur))
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("Success returning book", retur))
 	}
 }

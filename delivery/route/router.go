@@ -11,7 +11,8 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func RegisterPath(e *echo.Echo, uh *_userHandler.UserHandler, bh *_bookHandler.BookHandler, lh *_loanHandler.LoanHandler, rh *_returHandler.ReturHandler) {
+func RegisterPath(e *echo.Echo, uh *_userHandler.UserHandler, bh *_bookHandler.BookHandler,
+	lh *_loanHandler.LoanHandler, rh *_returHandler.ReturHandler) {
 	// user
 	e.GET("/users", uh.GetAllHandler(), _middlewares.JWTMiddleware())
 	e.POST("/users", uh.CreateUserHandler())

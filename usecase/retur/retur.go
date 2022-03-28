@@ -15,7 +15,7 @@ func NewReturUseCase(returrepo _returReapository.ReturRepositoryInterface) Retur
 	}
 }
 
-func (luc *ReturUseCase) Retur(Name string, Book string, Address string) (_entities.Retur, int, error) {
-	retur, row, err := luc.returRepository.Retur(Name, Book, Address)
+func (luc *ReturUseCase) Retur(LoanId int, BookId int, Address string) (_entities.Retur, int, error) {
+	retur, row, err := luc.returRepository.Retur(LoanId, BookId, Address)
 	return retur, row, err
 }
