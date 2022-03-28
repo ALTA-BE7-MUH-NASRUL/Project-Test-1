@@ -56,3 +56,12 @@ func (lr *LoanRepository) Loan(UserId int, BookId int, Address string) (_entitie
 	}
 	return loan, int(loans.RowsAffected), nil
 }
+
+func (ur *LoanRepository) List() ([]_entities.Loan, error) {
+	var list []_entities.Loan
+	tx := ur.database.Find(&list)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	return list, nil
+}

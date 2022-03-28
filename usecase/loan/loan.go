@@ -19,3 +19,7 @@ func (luc *LoanUseCase) Loan(UserId int, BookId int, Address string) (_entities.
 	loan, row, err := luc.loanRepository.Loan(UserId, BookId, Address)
 	return loan, row, err
 }
+func (luc *LoanUseCase) List() ([]_entities.Loan, error) {
+	list, err := luc.loanRepository.List()
+	return list, err
+}

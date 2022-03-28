@@ -27,8 +27,9 @@ func RegisterPath(e *echo.Echo, uh *_userHandler.UserHandler, bh *_bookHandler.B
 	e.DELETE("/books/:id", bh.DeleteBookHandler(), _middlewares.JWTMiddleware())
 	e.PUT("/books/:id", bh.UpdatedBookHandler(), _middlewares.JWTMiddleware())
 
-	e.POST("/loan", lh.LoaningHandler())
-	e.POST("/retur", rh.ReturingHandler())
+	e.POST("/loan", lh.LoaningHandler(), _middlewares.JWTMiddleware())
+	e.GET("/loan", lh.ListHandler(), _middlewares.JWTMiddleware())
+	e.POST("/retur", rh.ReturingHandler(), _middlewares.JWTMiddleware())
 }
 
 func RegisterAuthPath(e *echo.Echo, ah *_authHandler.AuthHandler) {

@@ -37,3 +37,16 @@ func (lh *LoanHandler) LoaningHandler() echo.HandlerFunc {
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("Success loaning book", loan))
 	}
 }
+
+func (uh *LoanHandler) ListHandler() echo.HandlerFunc {
+	return func(c echo.Context) error {
+		list, err := uh.loanUseCase.List()
+		if err != nil {
+			return c.JSON(http.StatusInternalServerError, helper.ResponseFailed("Failed to fetch data"))
+		}
+		if len(list) == 0 {
+			return c.JSON(http.StatusOK, helper.ResponseSuccess("Data not exist", list))
+		}
+		return c.JSON(http.StatusOK, helper.ResponseSuccess("success get all data", list))
+	}
+}
