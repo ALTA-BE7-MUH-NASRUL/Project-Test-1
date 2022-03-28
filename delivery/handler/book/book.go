@@ -50,6 +50,7 @@ func (bh *BookHandler) GetBookHandler() echo.HandlerFunc {
 
 func (bh *BookHandler) DeleteBookHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
+
 		idn := c.Param("id")
 		id, _ := strconv.Atoi(idn)
 		_, rows, err := bh.bookUseCase.GetBook(id)
@@ -80,6 +81,7 @@ func (bh *BookHandler) CreateBookHandler() echo.HandlerFunc {
 
 func (bh *BookHandler) UpdatedBookHandler() echo.HandlerFunc {
 	return func(c echo.Context) error {
+
 		idn := c.Param("id")
 		id, _ := strconv.Atoi(idn)
 		books, rows, err := bh.bookUseCase.GetBook(id)
