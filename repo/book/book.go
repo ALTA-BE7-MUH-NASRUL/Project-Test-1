@@ -50,6 +50,11 @@ func (br *BookRepository) DeleteBook(id int) (_entities.Book, error) {
 func (br *BookRepository) CreateBook(book _entities.Book) (_entities.Book, error) {
 	var books _entities.Book
 	books = book
+	if books.Qty > 0 {
+		books.Status = "book available"
+	} else {
+		book.Status = "book on loan/book not available"
+	}
 	tx := br.database.Save(&books)
 	if tx.Error != nil {
 		return books, tx.Error
@@ -61,6 +66,9 @@ func (br *BookRepository) CreateBook(book _entities.Book) (_entities.Book, error
 }
 
 func (br *BookRepository) UpdatedBook(books _entities.Book) (_entities.Book, error) {
+	if books.Qty == 0 {
+		books.Status = "book on loan/book not available"
+	}
 	tx := br.database.Save(&books)
 	if tx.Error != nil {
 		return books, tx.Error

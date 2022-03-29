@@ -27,7 +27,6 @@ func (lr *LoanRepository) Loan(UserId int, BookId int, Address string) (_entitie
 	if tx.RowsAffected == 0 {
 		return loan, 0, tx.Error
 	}
-
 	err := lr.database.Find(&user, UserId)
 	if err.Error != nil {
 		return loan, 0, err.Error
@@ -47,6 +46,9 @@ func (lr *LoanRepository) Loan(UserId int, BookId int, Address string) (_entitie
 	loan.BookID = book.ID
 	loan.UserID = user.ID
 	loan.Address = Address
+	if loan.Address == "" {
+		return loan, 2, err.Error
+	}
 	loans := lr.database.Create(&loan)
 	if loans.Error != nil {
 		return loan, 0, loans.Error

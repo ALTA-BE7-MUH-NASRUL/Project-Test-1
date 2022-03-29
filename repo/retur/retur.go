@@ -26,7 +26,7 @@ func (rr *ReturRepository) Retur(LoanId int, BookId int, Address string) (_entit
 		return retur, 0, err.Error
 	}
 	if err.RowsAffected == 0 {
-		return retur, 0, err.Error
+		return retur, 2, err.Error
 	}
 	if loan.Status == "returned" {
 		return retur, 0, nil

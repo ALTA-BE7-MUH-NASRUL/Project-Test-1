@@ -34,6 +34,9 @@ func (lh *LoanHandler) LoaningHandler() echo.HandlerFunc {
 		if row == 0 {
 			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("book on loan"))
 		}
+		if row == 2 {
+			return c.JSON(http.StatusBadRequest, helper.ResponseFailed("please insert your address"))
+		}
 		return c.JSON(http.StatusOK, helper.ResponseSuccess("Success loaning book", loan))
 	}
 }
