@@ -28,6 +28,7 @@ func (br *BookRepository) GetAll() ([]_entities.Book, error) {
 func (br *BookRepository) GetBook(id int) (_entities.Book, int, error) {
 	var books _entities.Book
 	tx := br.database.Find(&books, id)
+
 	if tx.Error != nil {
 		return books, 0, tx.Error
 	}
@@ -48,21 +49,20 @@ func (br *BookRepository) DeleteBook(id int) (_entities.Book, error) {
 	return books, nil
 }
 func (br *BookRepository) CreateBook(book _entities.Book) (_entities.Book, error) {
-	var books _entities.Book
-	books = book
-	if books.Qty > 0 {
-		books.Status = "book available"
+
+	if book.Qty > 0 {
+		book.Status = "book available"
 	} else {
 		book.Status = "book on loan/book not available"
 	}
-	tx := br.database.Save(&books)
+	tx := br.database.Save(&book)
 	if tx.Error != nil {
-		return books, tx.Error
+		return book, tx.Error
 	}
 	if tx.RowsAffected == 0 {
-		return books, tx.Error
+		return book, tx.Error
 	}
-	return books, nil
+	return book, nil
 }
 
 func (br *BookRepository) UpdatedBook(books _entities.Book) (_entities.Book, error) {

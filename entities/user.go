@@ -10,4 +10,5 @@ type User struct {
 	Address  string  `json:"address" form:"address"`
 	Retur    []Retur `gorm:"foreignKey:UserID;references:ID"`
 	Loan     []Loan  `gorm:"foreignKey:UserID;references:ID"`
+	Book     []Book  `gorm:"foreignKey:UserID;references:ID"`
 }
