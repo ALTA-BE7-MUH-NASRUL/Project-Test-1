@@ -1,6 +1,6 @@
 openapi: '3.0.2'
 info:
-  title: nasrul API
+  title: Rent Book API
   description: Alterra Academy Project
   termsOfService: http://example.com/terms/
   contact:
@@ -137,7 +137,7 @@ paths:
                   name: "nasrul",
                   email: "nasrul@alterra.id",
                   password: "inipassword",
-                  address: "Jakarta"
+                  address: "Pinrang"
                 }
               userData2:
                 description: "Example data user"
@@ -145,7 +145,7 @@ paths:
                   name: "nasrul 2",
                   email: "nasrul2@alterra.id",
                   password: "inipassword2",
-                  address: "Jakarta2"
+                  address: "Patampanua"
                 }
               # type: object
               # properties:
@@ -160,7 +160,7 @@ paths:
               #     example: inipassword
               #   address:
               #     type: string
-              #     example: Jakarta
+              #     example: Pinrang
       responses:
         '200':
           $ref: '#/components/responses/responseSuccess'
@@ -529,7 +529,7 @@ components:
                   example: inipassword
                 address:
                   type: string
-                  example: Jakarta
+                  example: Pinrang
 
   responses:
     #==================================#
